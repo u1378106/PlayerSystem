@@ -9,7 +9,7 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private Transform weaponModelTransformParent;
 
-    private GameObject model;
+
 
     private void OnEnable()
     {
@@ -30,17 +30,6 @@ public class Weapon : MonoBehaviour
             this.GetComponent<Animator>().SetBool("isAttacking", true);
             StartCoroutine(Attacking());
         }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            this.GetComponent<Animator>().SetBool("isWalking", true);
-            //StartCoroutine(Attacking());
-        }
-        else if (Input.GetKeyUp(KeyCode.W))
-        {
-            this.GetComponent<Animator>().SetBool("isWalking", false);
-            //StartCoroutine(Attacking());
-        }
     }
 
     IEnumerator Attacking()
@@ -56,7 +45,6 @@ public class Weapon : MonoBehaviour
     public void AttackNow()
     {
         GameObject projectile = Instantiate(weaponData.weapon, this.transform.position, Quaternion.identity);
-        //GameObject particle = Instantiate(weaponData.particleEffect, projectile.transform);
         GameObject trail = Instantiate(weaponData.weaponTrailEffect, projectile.transform);
         projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
     }

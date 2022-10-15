@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Target : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class Target : MonoBehaviour
     private GameObject damageParticle;
     [SerializeField]
     private GameObject destroyParticle;
+    [SerializeField]
+    private Image healthBar;
+    [SerializeField]
+    private int damageAmount;
 
 
 
@@ -18,12 +23,13 @@ public class Target : MonoBehaviour
     {
         GameObject _damageParticle = Instantiate(damageParticle, this.transform.position, Quaternion.identity);
         Destroy(other.gameObject);
-        TakeDamage(10);
+        TakeDamage(damageAmount);
     }
 
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+        healthBar.fillAmount -= 0.1f;
 
         if (currentHealth <= 0)
         {

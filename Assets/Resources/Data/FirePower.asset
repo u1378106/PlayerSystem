@@ -16,7 +16,7 @@ MonoBehaviour:
   message: Fire Power!
   weapon: {fileID: 2049321711628586728, guid: 860d806d834760c4a8708b7b24417f0f, type: 3}
   cooldownTime: 3
-  weaponTrailEffect: {fileID: 8764043878647920493, guid: c4ed38c72957f2241ad144a1614956d9,
+  weaponTrailEffect: {fileID: 1206498299807332555, guid: af6c1e3f046eecd4d81330aeb285600f,
     type: 3}
   stunDuration: 0
   freezeDuartion: 0

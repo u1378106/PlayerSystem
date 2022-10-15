@@ -23,6 +23,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.W))
+        {
+            this.GetComponent<Animator>().SetBool("isWalking", true);
+        }
+        else if (Input.GetKeyUp(KeyCode.W))
+        {
+            this.GetComponent<Animator>().SetBool("isWalking", false);
+        }
 
         float Horizontal = Input.GetAxis("Horizontal") * Speed * Time.deltaTime;
         float Vertical = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
