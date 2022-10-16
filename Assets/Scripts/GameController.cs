@@ -12,28 +12,44 @@ public class GameController : MonoBehaviour
     private List<Image> weaponIcons;
 
     [SerializeField]
-    private List<WeaponData> weaponSet;
+    private List<Weapon> weaponSet;
 
     int weaponIndex;
 
     Color tempColor;
 
+    public Weapon currentPower;
+
     AudioManager audioManager;
-    private void Start()
+
+    private FirePower firePower;
+
+    private IcePower icePower;
+
+    private ElectricPower electricPower;
+
+
+    void Start()
     {
-        audioManager = GameObject.FindObjectOfType<AudioManager>();
-
-        weaponSet = new List<WeaponData>();
-
         player = this.gameObject;
+
+        firePower = new FirePower();
+
+        icePower = new IcePower();
+
+        electricPower = new ElectricPower();
+
+        weaponSet = new List<Weapon>();
+
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.tag == "Fire")
-        {     
+        if (other.gameObject.tag == "Fire")
+        {
             weaponIndex++;
-            weaponSet.Add(Resources.Load("Data/FirePower") as WeaponData);        
+            weaponSet.Add(Resources.Load<Weapon>("Data/Fire"));
             CheckForWeapon(weaponIndex, "FirePower");
             Destroy(other.gameObject);
         }
@@ -41,7 +57,7 @@ public class GameController : MonoBehaviour
         else if (other.gameObject.tag == "Ice")
         {
             weaponIndex++;
-            weaponSet.Add(Resources.Load("Data/IcePower") as WeaponData);    
+            weaponSet.Add(Resources.Load<Weapon>("Data/Ice"));
             CheckForWeapon(weaponIndex, "IcePower");
             Destroy(other.gameObject);
         }
@@ -49,10 +65,18 @@ public class GameController : MonoBehaviour
         else if (other.gameObject.tag == "Electricity")
         {
             weaponIndex++;
-            weaponSet.Add(Resources.Load("Data/ElectricPower") as WeaponData);
+            weaponSet.Add(Resources.Load<Weapon>("Data/Electric"));
             CheckForWeapon(weaponIndex, "ElectricPower");
             Destroy(other.gameObject);
-            
+
+        }
+        else if (other.gameObject.tag == "BFG")
+        {
+            weaponIndex++;
+            weaponSet.Add(Resources.Load<Weapon>("Data/BFG"));
+            CheckForWeapon(weaponIndex, "BFGPower");
+            Destroy(other.gameObject);
+
         }
     }
 
@@ -61,17 +85,17 @@ public class GameController : MonoBehaviour
         audioManager.collect.Play();
 
         weaponIcons[i - 1].sprite = Resources.Load<Sprite>("Icons/" + weaponName);
-        tempColor = weaponIcons[i-1].color;
+        tempColor = weaponIcons[i - 1].color;
         tempColor.a = 0.7f;
-        weaponIcons[i - 1].color = tempColor;            
+        weaponIcons[i - 1].color = tempColor;
     }
 
-        private void Update()
+    private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             audioManager.weaponChange.Play();
-            player.GetComponent<Weapon>().weaponData = weaponSet[0];
+            currentPower = weaponSet[0];
 
             tempColor.a = 1f;
             weaponIcons[0].color = tempColor;
@@ -84,7 +108,7 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             audioManager.weaponChange.Play();
-            player.GetComponent<Weapon>().weaponData = weaponSet[1];
+            currentPower = weaponSet[1];
 
             tempColor.a = 1f;
             weaponIcons[1].color = tempColor;
@@ -97,7 +121,7 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             audioManager.weaponChange.Play();
-            player.GetComponent<Weapon>().weaponData = weaponSet[2];
+            currentPower = weaponSet[2];
 
             tempColor.a = 1f;
             weaponIcons[2].color = tempColor;
@@ -106,5 +130,22 @@ public class GameController : MonoBehaviour
             weaponIcons[0].color = tempColor;
             weaponIcons[1].color = tempColor;
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            this.GetComponent<Animator>().SetBool("isAttacking", true);
+            StartCoroutine(Attacking());
+        }
     }
+
+    IEnumerator Attacking()
+    {
+        this.GetComponent<Animator>().SetBool("isAttacking", true);
+        yield return new WaitForSeconds(0.3f);
+        audioManager.shoot.Play();
+        currentPower.Activate();
+        yield return new WaitForSeconds(1f);
+        this.GetComponent<Animator>().SetBool("isAttacking", false);
+    }
+
 }

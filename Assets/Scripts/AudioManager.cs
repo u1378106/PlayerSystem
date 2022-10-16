@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource firePunch, icePunch, electricPunch, blast, damage, collect, weaponChange;
+    public AudioSource firePunch, icePunch, electricPunch, blast, damage, collect, weaponChange, shoot;
 }

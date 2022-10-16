@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirePower : Weapon
+public class ElectricPower : Weapon
 {
     public GameObject weaponTrailEffect;
+    public int stunDuration;
 
     public override void Activate()
     {
-        Attack(weaponTrailEffect, GameObject.FindGameObjectWithTag("Player"));
+        Stun(weaponTrailEffect, GameObject.FindGameObjectWithTag("Player"));
     }
 }

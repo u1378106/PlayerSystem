@@ -2,65 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour
 {
-    public WeaponData weaponData;
+    public int Damage;
+    public int cooldownTime;
 
-    [SerializeField]
-    private Transform weaponModelTransformParent;
+    public abstract void Activate();
 
 
-
-    private void OnEnable()
+    protected void Attack(GameObject weaponTrailEffect, GameObject player)
     {
-        //if (model != null)
-        //    Destroy(model);
+        Debug.Log("Attacking....!");
 
-        if(weaponData.weapon != null)
-        {
-            //model = Instantiate(weaponData.model);
-            //model.transform.SetParent(weaponModelTransformParent, false);
-        }
+        GameObject projectile = Instantiate(this.gameObject, player.transform.position, Quaternion.identity);
+        GameObject trail = Instantiate(weaponTrailEffect, projectile.transform);
+        projectile.GetComponent<Rigidbody>().AddForce(player.transform.forward * 1000);
     }
 
-    private void Update()
+    protected void MegaAttack(GameObject weaponTrailEffect, GameObject player)
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            this.GetComponent<Animator>().SetBool("isAttacking", true);
-            StartCoroutine(Attacking());
-        }
+        Debug.Log("Mega Attack....!");
+
+        GameObject projectile = Instantiate(this.gameObject, player.transform.position, Quaternion.identity);
+        GameObject trail = Instantiate(weaponTrailEffect, projectile.transform);
+        projectile.GetComponent<Rigidbody>().AddForce(player.transform.forward * 1000);
     }
 
-    IEnumerator Attacking()
+    protected void Stun(GameObject weaponTrailEffect, GameObject player)
     {
+        Debug.Log("Stunned....!");
 
-        this.GetComponent<Animator>().SetBool("isAttacking", true);
-        yield return new WaitForSeconds(0.3f);
-        AttackNow();
-        yield return new WaitForSeconds(1f);
-        this.GetComponent<Animator>().SetBool("isAttacking", false);
+        GameObject projectile = Instantiate(this.gameObject, player.transform.position, Quaternion.identity);
+        GameObject trail = Instantiate(weaponTrailEffect, projectile.transform);
+        projectile.GetComponent<Rigidbody>().AddForce(player.transform.forward * 1000);
     }
 
-    public void AttackNow()
+    protected void Freeze(GameObject weaponTrailEffect, GameObject player)
     {
-        GameObject projectile = Instantiate(weaponData.weapon, this.transform.position, Quaternion.identity);
-        GameObject trail = Instantiate(weaponData.weaponTrailEffect, projectile.transform);
-        projectile.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
-    }
+        Debug.Log("Freeze....!");
 
-    public void Attack(Target target)
-    {
-        if (weaponData.Damage > 0)
-            target.TakeDamage(weaponData.Damage);
-
-        if (weaponData.stunDuration > 0)
-            target.Stun(weaponData.stunDuration);
-
-        if (weaponData.freezeDuartion > 0)
-            target.Freeze(weaponData.freezeDuartion);
-
-        string message = string.IsNullOrEmpty(weaponData.message) ? "hit" : weaponData.message;
-            Debug.Log("You " + message + "" + target.name);
+        GameObject projectile = Instantiate(this.gameObject, player.transform.position, Quaternion.identity);
+        GameObject trail = Instantiate(weaponTrailEffect, projectile.transform);
+        projectile.GetComponent<Rigidbody>().AddForce(player.transform.forward * 1000);
     }
 }

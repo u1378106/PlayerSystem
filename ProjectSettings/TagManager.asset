@@ -9,6 +9,7 @@ TagManager:
   - Fire
   - Ice
   - Electricity
+  - BFG
   layers:
   - Default
   - TransparentFX
